@@ -25,9 +25,9 @@ public class InfoAboutOtherPC {
 
     private final int port;
     private final InetAddress inetAddress;
-    private final long date;
+    private long date;
 
-    private final static int MAX_GAP = 5000;
+    private final static long MAX_GAP = 5000;
 
     public InfoAboutOtherPC(int port, InetAddress inetAddress, long dateTime) {
         this.date = dateTime;
@@ -35,18 +35,10 @@ public class InfoAboutOtherPC {
         this.inetAddress = inetAddress;
     }
 
-
-    public int getPort() {
-        return port;
-    }
-
     public InetAddress getInetAddress() {
         return inetAddress;
     }
 
-    public long getDate() {
-        return date;
-    }
 
     public boolean isActual (long date) {
         if (date - this.date > MAX_GAP) {
@@ -54,5 +46,9 @@ public class InfoAboutOtherPC {
         }
 
         return true;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 }

@@ -3,9 +3,7 @@ package com.chirikhin.network1udp;
 import java.io.IOException;
 import java.net.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Observable;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Client extends Observable implements Runnable{
@@ -14,7 +12,7 @@ public class Client extends Observable implements Runnable{
 
     private final DatagramSocket datagramSocket;
 
-    private final LinkedList<InfoAboutOtherPC> infoAboutOtherPCs = new LinkedList<>();
+    private final HashMap<InfoAboutOtherPC, InfoAboutOtherPC> infoAboutOtherPCs = new HashMap<>();
 
     private int port;
 
@@ -35,7 +33,7 @@ public class Client extends Observable implements Runnable{
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                if (System.currentTimeMillis() - time > 1000) {
+                if (System.currentTimeMillis() - time > TIME_BETWEEN_SENDINGS) {
                     datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress("255.255.255.255", port)));
                     time = System.currentTimeMillis();
                 }
@@ -45,15 +43,18 @@ public class Client extends Observable implements Runnable{
                 datagramSocket.receive(receivePacket);
 
                 InfoAboutOtherPC infoAboutOtherPC = new InfoAboutOtherPC(receivePacket.getPort(), receivePacket.getAddress(), System.currentTimeMillis());
-                if (!infoAboutOtherPCs.contains(infoAboutOtherPC)) {
-                    infoAboutOtherPCs.add(infoAboutOtherPC);
+                if (!infoAboutOtherPCs.containsKey(infoAboutOtherPC)) {
+                    infoAboutOtherPCs.put(infoAboutOtherPC, infoAboutOtherPC);
                     System.out.println(infoAboutOtherPC.getInetAddress() + " was added");
+                } else {
+                    infoAboutOtherPC = infoAboutOtherPCs.get(infoAboutOtherPC);
+                    infoAboutOtherPC.setDate(System.currentTimeMillis());
                 }
 
-                Iterator<InfoAboutOtherPC> iterator = infoAboutOtherPCs.iterator();
+                Iterator<Map.Entry<InfoAboutOtherPC, InfoAboutOtherPC>> iterator = infoAboutOtherPCs.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                        InfoAboutOtherPC infoAboutOtherPC1 = iterator.next();
+                        InfoAboutOtherPC infoAboutOtherPC1 = iterator.next().getKey();
                         if (!infoAboutOtherPC1.isActual(System.currentTimeMillis())) {
                             iterator.remove();
                             System.out.println(infoAboutOtherPC1.getInetAddress() + " was removed");
