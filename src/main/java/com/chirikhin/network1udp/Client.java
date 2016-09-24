@@ -45,9 +45,7 @@ public class Client extends Observable implements Runnable{
                 datagramSocket.receive(receivePacket);
 
                 InfoAboutOtherPC infoAboutOtherPC = new InfoAboutOtherPC(receivePacket.getPort(), receivePacket.getAddress(), System.currentTimeMillis());
-                if (infoAboutOtherPCs.contains(infoAboutOtherPC)) {
-                    continue;
-                } else {
+                if (!infoAboutOtherPCs.contains(infoAboutOtherPC)) {
                     infoAboutOtherPCs.add(infoAboutOtherPC);
                     System.out.println(infoAboutOtherPC.getInetAddress() + " was added");
                 }
