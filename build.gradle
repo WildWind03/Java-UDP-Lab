@@ -12,8 +12,6 @@ repositories {
 
 dependencies {
     compile 'joda-time:joda-time:2.9.4'
-    compile files("${System.properties['java.home']}/../lib/tools.jar")
-
 }
 
 jar {

@@ -30,9 +30,14 @@ public class Client extends Observable implements Runnable{
 
     @Override
     public void run() {
+        long time = System.currentTimeMillis();
+
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress("255.255.255.255", port)));
+                if (time - System.currentTimeMillis() > 1000) {
+                    datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress("255.255.255.255", port)));
+                    time = System.currentTimeMillis();
+                }
 
                 DatagramPacket receivePacket = new DatagramPacket(new byte[]{}, 0);
 
