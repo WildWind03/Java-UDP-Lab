@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public class Client extends Observable implements Runnable{
     private final static Logger logger = Logger.getLogger(Client.class.getName());
+    private final static int TIME_BETWEEN_SENDINGS = 1000;
 
     private final DatagramSocket datagramSocket;
 
@@ -34,7 +35,7 @@ public class Client extends Observable implements Runnable{
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                if (time - System.currentTimeMillis() > 1000) {
+                if (System.currentTimeMillis() - time > 1000) {
                     datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress("255.255.255.255", port)));
                     time = System.currentTimeMillis();
                 }
@@ -63,7 +64,7 @@ public class Client extends Observable implements Runnable{
 
             }
             catch (IOException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
             }
         }
     }
