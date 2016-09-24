@@ -1,0 +1,23 @@
+group 'ru.nsu.fit.chirikhin'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'com.chirikhin.network1udp.Main'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'joda-time:joda-time:2.9.4'
+    compile files("${System.properties['java.home']}/../lib/tools.jar")
+
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.chirikhin.network1udp.Main'
+    }
+}
