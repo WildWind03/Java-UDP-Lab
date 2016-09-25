@@ -10,6 +10,10 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    runtime files(org.gradle.internal.jvm.Jvm.current().toolsJar)
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'com.chirikhin.network1udp.Main'
