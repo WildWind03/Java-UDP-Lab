@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 public class Client extends Observable implements Runnable{
     private final static Logger logger = Logger.getLogger(Client.class.getName());
     private final static int TIME_BETWEEN_SENDINGS = 1000;
+    private final static String BROADCAST_IP = "255.255.255.255";
 
     private final DatagramSocket datagramSocket;
 
@@ -22,7 +23,6 @@ public class Client extends Observable implements Runnable{
             this.datagramSocket.setSoTimeout(timeout);
             this.port = port;
         } catch (SocketException e) {
-            e.printStackTrace();
             throw new ClientCreateException(e.getMessage());
         }
     }
@@ -34,7 +34,7 @@ public class Client extends Observable implements Runnable{
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 if (System.currentTimeMillis() - time > TIME_BETWEEN_SENDINGS) {
-                    datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress("255.255.255.255", port)));
+                    datagramSocket.send(new DatagramPacket(new byte[]{}, 0, new InetSocketAddress(BROADCAST_IP, port)));
                     time = System.currentTimeMillis();
                 }
 
@@ -63,7 +63,7 @@ public class Client extends Observable implements Runnable{
 
             }
             catch (IOException e) {
-                //System.out.println(e.getMessage());
+                //logger.log(Level.INFO, e.getMessage());
             }
         }
     }
